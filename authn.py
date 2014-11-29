@@ -23,7 +23,7 @@ def main(n, flourish_seq, left_hand=True):
     user_result = Deck.empty_deck()
     result_hand = 'LEFT' if left_hand else 'RIGHT'
     print("Enter the final deck configuration in your " + result_hand + " hand line by line")
-    print("Separate the value and suit by a space")
+    print("Separate the value and suit by a space (e.g. 10 Diamonds)")
     print("The cards should be entered from the top of the deck to the bottom")
     print("Type a period when finished")
     while True:

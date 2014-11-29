@@ -9,3 +9,6 @@ python authn.py NUM_CARDS
 
 So to do a login with a deck of 20 cards, do
 python authn.py 20
+
+Note that the input is very picky about formatting right now. Capitalization and
+everything matters
