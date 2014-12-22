@@ -1,6 +1,6 @@
 import sys
 import random
-from deck import Deck
+from deck import Deck, Card
 
 import flourishes
 
@@ -30,7 +30,7 @@ def main(n, flourish_seq, left_hand=True):
         inp = raw_input("Card: ")
         if inp is '.':
             break
-        user_result.add_card(tuple(inp.split(" ")), False) # TODO: we should determine at runtime which hand to add it to
+        user_result.add_card(Card(*inp.split(" ")), False) # TODO: we should determine at runtime which hand to add it to
 
     if user_result.hand_equals(auth_deck, left_hand):
         print("You really are a cardist!")

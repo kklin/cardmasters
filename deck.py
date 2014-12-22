@@ -112,12 +112,12 @@ class Deck(object):
 
     # Moves card at index LEFT from left hand to index RIGHT in right hand
     def left_to_right(self, left, right):
-        to_move = self.cards_lh.pop[left]
+        to_move = self.cards_lh.pop(left)
         self.cards_rh.insert(right, to_move)
 
     # Moves card at index RIGHT from right hand to index LEFT in left hand
     def right_to_left(self, right, left):
-        to_move = self.cards_rh.pop[right]
+        to_move = self.cards_rh.pop(right)
         self.cards_lh.insert(left, to_move)
 
     def hand_equals(self, other, left_hand):
