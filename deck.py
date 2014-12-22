@@ -79,6 +79,20 @@ class Deck(object):
             ret += str(card) + "\n"
         return ret
 
+    def hand_equals(self, other, left_hand):
+        if left_hand == 'LEFT':
+            return self.cards_lh == other.cards_lh
+        return self.cards_rh == other.cards_rh
+
+    def equals(self, other):
+        return self.hand_equals(other, 'LEFT') and self.hand_equals(other, 'RIGHT')
+
+    def size(self):
+        return len(self.get_hand('LEFT')) + len(self.get_hand('RIGHT'))
+
+    def copy(self):
+        return Deck(copy = self)
+
     def get_hand(self, hand):
         if hand == 'LEFT':
             deck = self.cards_lh
@@ -98,6 +112,17 @@ class Deck(object):
             to = len(deck) + to
         c = deck.pop(frm)
         deck.insert(to, c)
+
+    # Moves card at index LEFT from left hand to index RIGHT in right hand
+    def left_to_right(self, left, right):
+        to_move = self.cards_lh.pop(left)
+        self.cards_rh.insert(right, to_move)
+
+    # Moves card at index RIGHT from right hand to index LEFT in left hand
+    def right_to_left(self, right, left):
+        to_move = self.cards_rh.pop(right)
+        self.cards_lh.insert(left, to_move)
+
 
     # Returns a list containing cards index I1 to index I2 from HAND 
     def get_pack(self, i1, i2, hand = 'LEFT'):
@@ -124,38 +149,15 @@ class Deck(object):
         for card in pack:
             deck.insert(i, card)
 
+    def reverse(self, i1, i2, hand = 'LEFT'):
+        deck = self.pop_pack(i1, i2, hand)
+        self.insert_pack(deck, i1, hand)
+
     # Turns over cards I1 to I2 in HAND
     def turnover(self, i1, i2, hand = 'LEFT'):
-        deck = self.pop_pack(i1, i2, hand)
-        deck.reverse()
-        if i1 < 0:
-            i1 = len(deck) + i1
-        k = i1
+        self.reverse(i1, i2, hand)
+        deck = self.get_pack(i1, i2, hand)
         for card in deck:
             card.flip_over()
-            self.get_hand(hand).insert(k, card)
-            k += 1
 
-    # Moves card at index LEFT from left hand to index RIGHT in right hand
-    def left_to_right(self, left, right):
-        to_move = self.cards_lh.pop(left)
-        self.cards_rh.insert(right, to_move)
 
-    # Moves card at index RIGHT from right hand to index LEFT in left hand
-    def right_to_left(self, right, left):
-        to_move = self.cards_rh.pop(right)
-        self.cards_lh.insert(left, to_move)
-
-    def hand_equals(self, other, left_hand):
-        if left_hand == 'LEFT':
-            return self.cards_lh == other.cards_lh
-        return self.cards_rh == other.cards_rh
-
-    def equals(self, other):
-        return self.hand_equals(other, 'LEFT') and self.hand_equals(other, 'RIGHT')
-
-    def size(self):
-        return len(self.get_hand('LEFT')) + len(self.get_hand('RIGHT'))
-
-    def copy(self):
-        return Deck(copy = self)

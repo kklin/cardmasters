@@ -46,3 +46,19 @@ class InstantReplay(Flourish):
 
     def __str__():
         return "Instant Replay by Paul Harris (Right to Left)"
+
+class DBD(Flourish):
+    @staticmethod
+    def apply(deck):        
+        deck.turnover(0, 1)
+
+    def __str__():
+        return "Divingboard Double by Lee Asher"
+
+class Erdnase(Flourish):
+    @staticmethod
+    def apply(deck):        
+        deck.reverse(0, 1)
+
+    def __str__():
+        return "Erdnase Color Change by S.W. Erdnase"

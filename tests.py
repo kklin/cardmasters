@@ -34,12 +34,18 @@ class flourishTests(unittest.TestCase):
         orig = self.deck.copy()
         pack = self.deck.pop_pack(0, 3)
         self.deck.insert_pack(pack, 0, 'RIGHT')
-        print(self.deck)
         self.assertTrue(not orig.equals(self.deck))
         flourishes.InstantReplay.apply(self.deck)
-        print(self.deck)
         self.assertTrue(orig.equals(self.deck))
 
+    def test_DBD_to_erdnase(self):
+        orig = self.deck.copy()
+        cards = [orig.get(0), orig.get(1)]
+        for c in cards:
+            c.flip_over()
+        flourishes.DBD.apply(self.deck)
+        flourishes.Erdnase.apply(self.deck)
+        self.assertEquals(cards, self.deck.get_pack(0, 1))
 
 if __name__ == '__main__':
     unittest.main()
