@@ -5,6 +5,7 @@
 # the print statements should be encapsulated in objects
 
 from abc import ABCMeta, abstractmethod
+import random
 
 class Flourish(object):
     __metaclass__ = ABCMeta
@@ -13,18 +14,35 @@ class Flourish(object):
     def apply(deck):
         pass
 
+
 class HotShot(Flourish):
     @staticmethod
     def apply(deck):
         deck.left_to_right(-1, 0)
+        hand = deck.get_hand('LEFT') 
+        i = random.randint(0, len(hand) - 3)
+        cut = deck.pop_pack(0, i)
+        deck.insert_pack(cut, -1)
 
     def __str__():
-        return "HotShot"
+        return "Hot Shot Cut by Daryl"
 
 class TopShot(Flourish):
     @staticmethod
     def apply(deck):
+        card = deck.get(0)
+        card.flip_over()
         deck.left_to_right(0, 0)
 
+
     def __str__():
-        return "TopShot"
+        return "Top Shot by Lennart Green"
+
+class InstantReplay(Flourish):
+    @staticmethod
+    def apply(deck):        
+        cut = deck.pop_pack(0, -1, 'RIGHT')
+        deck.insert_pack(cut, 0, 'LEFT')
+
+    def __str__():
+        return "Instant Replay by Paul Harris (Right to Left)"

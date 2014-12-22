@@ -13,22 +13,27 @@ class Card(object):
         return self.val + " of " + self.suit
 
     def __cmp__(self, other):
-        v1 = self.val
-        v2 = other.val
-        suits = ['Jack', 'Queen', 'King', 'Ace']
+        v1, v2 = self.val, other.val
+        s1, s2 = self.suit, other.suit
+        face = ['Jack', 'Queen', 'King', 'Ace']
+        for f in face:
+            if self.val == f:
+                v1 = 11 + face.index(f)
+            if other.val == f:
+                v2 = 11 + face.index(f)
+        suits = ['Clubs', 'Diamonds', 'Hearts', 'Spades']
         for s in suits:
-            if v1 == s:
-                v1 = suits.index(s) + 1
-            if v2 == s:
-                v2 = suits.index(s) + 1
-                
-        #Cards must be the same card to be considered equal
-        if v1 == v2 and self.suit == other.suit:
-            return 0
-        elif v1 > v2:
-            return 1
-        elif v1 < v2:
-            return -1
+            if s1 == s:
+                s1 = suits.index(s)
+            if s2 == s:
+                s2 = suits.index(s)
+        _cmp = int(v1) - int(v2)
+        if _cmp == 0:
+            if s1 - s2 == 0:
+                if not (self.faceup is other.faceup):
+                    return 1
+            return s1 - s2
+        return _cmp
 
     def same_val(self, other):
         return self.val == other.val
@@ -42,13 +47,17 @@ class Card(object):
 # TODO: define another class to represent cards
 
 class Deck(object):
-    def __init__(self, n):
-        suits = ['Clubs', 'Hearts', 'Spades', 'Diamonds']
-        values = map(str, list(range(2, 11))) + ['Jack', 'Queen', 'King', 'Ace']
-        deck = list(itertools.product(values, suits))
-        obj_deck = map(lambda x: Card(x[0], x[1]), deck)
-        self.cards_lh = random.sample(obj_deck, n)
-        self.cards_rh = []
+    def __init__(self, n = 52, copy = None):
+        if copy:
+            self.cards_lh = list(copy.cards_lh)
+            self.cards_rh = list(copy.cards_rh)
+        else:
+            suits = ['Clubs', 'Hearts', 'Spades', 'Diamonds']
+            values = map(str, list(range(2, 11))) + ['Jack', 'Queen', 'King', 'Ace']
+            deck = list(itertools.product(values, suits))
+            obj_deck = map(lambda x: Card(x[0], x[1]), deck)
+            self.cards_lh = random.sample(obj_deck, n)
+            self.cards_rh = []
 
     @staticmethod
     def empty_deck():
@@ -65,7 +74,7 @@ class Deck(object):
         ret = "Left Hand:\n"
         for card in self.cards_lh:
             ret += str(card) + "\n"
-        ret += "Right Hand:\n"
+        ret += "\nRight Hand:\n"
         for card in self.cards_rh:
             ret += str(card) + "\n"
         return ret
@@ -107,6 +116,14 @@ class Deck(object):
             deck.remove(card)
         return pack
 
+    def insert_pack(self, pack, i, hand = 'LEFT'):
+        pack.reverse()
+        deck = self.get_hand(hand)
+        if i < 0:
+            i = len(deck) + i + 1
+        for card in pack:
+            deck.insert(i, card)
+
     # Turns over cards I1 to I2 in HAND
     def turnover(self, i1, i2, hand = 'LEFT'):
         deck = self.pop_pack(i1, i2, hand)
@@ -135,4 +152,10 @@ class Deck(object):
         return self.cards_rh == other.cards_rh
 
     def equals(self, other):
-        return hand_equals(other, 'LEFT') and hand_equals(other, 'RIGHT')
+        return self.hand_equals(other, 'LEFT') and self.hand_equals(other, 'RIGHT')
+
+    def size(self):
+        return len(self.get_hand('LEFT')) + len(self.get_hand('RIGHT'))
+
+    def copy(self):
+        return Deck(copy = self)
