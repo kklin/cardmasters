@@ -13,12 +13,21 @@ class Card(object):
         return self.val + " of " + self.suit
 
     def __cmp__(self, other):
+        v1 = self.val
+        v2 = other.val
+        suits = ['Jack', 'Queen', 'King', 'Ace']
+        for s in suits:
+            if v1 == s:
+                v1 = suits.index(s) + 1
+            if v2 == s:
+                v2 = suits.index(s) + 1
+                
         #Cards must be the same card to be considered equal
-        if self.val == other.val and self.suit == other.suit:
+        if v1 == v2 and self.suit == other.suit:
             return 0
-        elif self.val > other.val:
+        elif v1 > v2:
             return 1
-        elif self.val < other.val:
+        elif v1 < v2:
             return -1
 
     def same_val(self, other):
