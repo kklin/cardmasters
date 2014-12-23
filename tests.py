@@ -11,9 +11,9 @@ class flourishTests(unittest.TestCase):
         self.assertTrue(self.osize == self.deck.size())
 
     def test_hotshot(self):
-        bottom = self.deck.get(self.osize - 1)
+        bottom = self.deck.get(-1)
         top = self.deck.get(0)
-        secondbottom = self.deck.get(self.osize - 2)
+        secondbottom = self.deck.get(-2)
         flourishes.HotShot.apply(self.deck)
 
         # Tests that BOTTOM travelled to right hand
@@ -46,6 +46,15 @@ class flourishTests(unittest.TestCase):
         flourishes.DBD.apply(self.deck)
         flourishes.Erdnase.apply(self.deck)
         self.assertEquals(cards, self.deck.get_pack(0, 1))
+
+    def test_rev(self):
+        bottom = self.deck.get(-1)
+        top = self.deck.get(0)
+        flourishes.Rev.apply(self.deck)
+        hand = self.deck.get_hand('LEFT')
+        i = hand.index(bottom)
+        self.assertTrue(top == self.deck.get(i + 1))
+
 
 if __name__ == '__main__':
     unittest.main()

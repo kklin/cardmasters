@@ -14,6 +14,24 @@ class Flourish(object):
     def apply(deck):
         pass
 
+class Charlier(Flourish):
+    @staticmethod
+    def apply(deck, hand = 'LEFT'):
+        pack = deck.get_hand(hand) 
+        i = random.randint(0, len(pack) - 2)
+        cut = deck.pop_pack(0, i, hand)
+        deck.insert_pack(cut, -1, hand)
+
+    def __str__():
+        return "Charlier Cut"
+
+class Rev(Flourish):
+    @staticmethod
+    def apply(deck, hand = 'LEFT'):
+        Charlier.apply(deck, hand)
+
+    def __str__():
+        return "Revolution Cut by Brian Tudor"
 
 class HotShot(Flourish):
     @staticmethod
@@ -62,3 +80,12 @@ class Erdnase(Flourish):
 
     def __str__():
         return "Erdnase Color Change by S.W. Erdnase"
+
+class Ego(Flourish):
+    @staticmethod
+    def apply(deck):        
+        deck.reverse(0, 0)
+        deck.move(0, -1)
+
+    def __str__():
+        return "Ego Change by Daniel Garcia"
