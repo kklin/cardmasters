@@ -7,12 +7,25 @@
 from abc import ABCMeta, abstractmethod
 import random
 
+
 class Flourish(object):
     __metaclass__ = ABCMeta
 
     @abstractmethod
     def apply(deck):
         pass
+
+# ___________FALSE CUTS____________ 
+
+class Mol2(Flourish):
+    @staticmethod
+    def apply(deck):
+        pass
+
+    def __str__():
+        return "Molecule 2 by Dan and Dave Buck"
+
+# ___________TOP-BOTTOM CONNECTING CUTS____________ 
 
 class Charlier(Flourish):
     @staticmethod
@@ -32,6 +45,8 @@ class Rev(Flourish):
 
     def __str__():
         return "Revolution Cut by Brian Tudor"
+
+# ___________AERIAL/HAND-TRAVELING MOVES____________ 
 
 class HotShot(Flourish):
     @staticmethod
@@ -64,6 +79,8 @@ class InstantReplay(Flourish):
 
     def __str__():
         return "Instant Replay by Paul Harris (Right to Left)"
+
+# ___________TURNOVER MOVES____________ 
 
 class DBD(Flourish):
     @staticmethod
