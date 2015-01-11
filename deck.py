@@ -160,4 +160,7 @@ class Deck(object):
         for card in deck:
             card.flip_over()
 
-
+    # This is destructive!!
+    def execute_flourishes(self, flourishes):
+        for flourish in flourishes:
+            flourish.apply(self)

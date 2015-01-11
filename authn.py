@@ -4,8 +4,21 @@ from deck import Deck, Card
 
 import flourishes
 
-def get_random_deck(n=52):
-    return Deck(n)
+class AuthenticationSequence(object):
+
+    def __init__(self, flourishes, deck_size = 52):
+        self.flourishes = flourishes
+        self.deck = Deck(deck_size)
+
+    def verify(self, deck, hand):
+        expected = self.deck.copy()
+        expected.execute_flourishes(self.flourishes)
+        return deck.hand_equals(expected, hand)
+
+    def get_expected(self):
+        expected = self.deck.copy()
+        expected.execute_flourishes(self.flourishes)
+        return expected
 
 # destructively modifies deck
 def apply_flourishes(deck, flourish_seq):
@@ -13,12 +26,11 @@ def apply_flourishes(deck, flourish_seq):
         flourish.apply(deck)
 
 def main(n, flourish_seq, left_hand=True):
-    auth_deck = get_random_deck(n)
+    authn = AuthenticationSequence(flourish_seq, n)
     print("Please arrange your deck in the following order:")
-    print(auth_deck)
-    apply_flourishes(auth_deck, flourish_seq)
-    # print("Deck is now in this state: ")
-    # print(auth_deck)
+    print(authn.deck)
+    # print("Expecting: ")
+    # print(authn.get_expected())
 
     user_result = Deck.empty_deck()
     result_hand = 'LEFT' if left_hand else 'RIGHT'
@@ -32,7 +44,7 @@ def main(n, flourish_seq, left_hand=True):
             break
         user_result.add_card(Card(*inp.split(" ")), False) # TODO: we should determine at runtime which hand to add it to
 
-    if user_result.hand_equals(auth_deck, left_hand):
+    if authn.verify(user_result, result_hand):
         print("You really are a cardist!")
     else:
         print("Ehh.. maybe you should keep practicing")
@@ -42,5 +54,5 @@ def main(n, flourish_seq, left_hand=True):
 
 if __name__ == '__main__':
     deck_size = int(sys.argv[1])
-    flourish_seq = [flourishes.HotShot, flourishes.TopShot]
+    flourish_seq = [flourishes.TopShot]
     main(deck_size, flourish_seq, False)
